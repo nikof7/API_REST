@@ -1,11 +1,11 @@
-import express from 'express';
+import { Router } from 'express';
 import { errorMessages } from '../helpers/errorMessages.js';
 import { login, register } from '../controllers/auth.controllers.js';
 import { body } from 'express-validator';
 import { validationResultExpress } from '../middlewares/validationResultExpress.js';
 import { MIN_PASSWORD_LENGTH } from '../helpers/configOptions.js';
 
-const router = express.Router();
+const router = Router();
 
 // Longitud mínima para la contraseña
 
