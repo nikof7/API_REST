@@ -1,9 +1,13 @@
+import 'dotenv/config'
+import "./database/connectdb.js"
 import express from 'express';
+import authRouter from './routes/auth.routes.js'
 
 const app = express();
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.json({ok:'true'})
-});
+app.use('/api/v1', authRouter);
 
-app.listen(5000, () => console.log("Server started on http://localhost:5000/"));
+const PORT = process.env.PORT || 5000
+
+app.listen(5000, () => console.log(`Server started on http://localhost:${PORT}/`));
