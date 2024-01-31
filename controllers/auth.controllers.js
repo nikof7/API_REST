@@ -1,6 +1,7 @@
 import { User } from '../models/user.js'
 import { errorMessages } from '../helpers/errorMessages.js';
 import jwt from 'jsonwebtoken'
+import { generateToken } from './utils/tokenManager.js';
 
 export const register = async (req, res) => {
     const { email, password } = req.body
@@ -12,7 +13,7 @@ export const register = async (req, res) => {
         await user.save()
 
         // Generar el token con JWT
-        
+
         return res.status(201).json({ ok: true })
     } catch (error) {
         console.log(error)
@@ -30,15 +31,24 @@ export const login = async (req, res) => {
         if (!user) return res.status(403).json({ error: errorMessages.emailNotRegistered })
 
         const passwordResponse = await user.comparePassword(password)
-        if (!passwordResponse){ 
-            return res.status(403).json({ error: errorMessages.incorrectPassword})
+        if (!passwordResponse) {
+            return res.status(400).json({ error: errorMessages.incorrectPassword })
         }
         // Generar el token con JWT
-        const token = jwt.sign({uid: user._id}, process.env.JWT_SECRET)
+        const { token, expiresIn } = generateToken(user.id)
 
-        return res.json({ token })
+        return res.json({ token, expiresIn })
     } catch (error) {
         console.log(error)
         return res.status(500).json({ error: errorMessages.serverError })
     }
 };
+
+export const infoUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.uid).lean();
+        return res.json({ email: user.email, uid: user._id })
+    } catch (error) {
+        return res.status(500).json({error: errorMessages.serverError})
+    }
+}

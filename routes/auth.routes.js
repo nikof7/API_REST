@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { errorMessages } from '../helpers/errorMessages.js';
-import { login, register } from '../controllers/auth.controllers.js';
+import { infoUser, login, register } from '../controllers/auth.controllers.js';
 import { body } from 'express-validator';
 import { validationResultExpress } from '../middlewares/validationResultExpress.js';
 import { MIN_PASSWORD_LENGTH } from '../helpers/configOptions.js';
+import { requireToken } from '../middlewares/requireToken.js';
 
 const router = Router();
 
@@ -40,5 +41,7 @@ router.post('/login', [
 ],
     validationResultExpress,
     login);
+
+router.get("/protected", requireToken , infoUser)
 
 export default router;
