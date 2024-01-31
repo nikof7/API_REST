@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
+
 <body>
     <form id="form">
         <input type="text" value="nico2@ico.com" id="email">
@@ -25,17 +27,20 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({email: email.value, password: password.value})
+                    body: JSON.stringify({ email: email.value, password: password.value })
                 })
                 console.log(res.ok, res.status)
-                
-                const {token} = await res.json()
-                localStorage.setItem("token", token)
+
+                const { token } = await res.json()
+
+                //localStorage.setItem("token", token)
                 console.log(data)
+
             } catch (error) {
                 console.log(error)
             }
         })
-</script>
+    </script>
 </body>
+
 </html>

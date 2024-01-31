@@ -1,7 +1,7 @@
 import { User } from '../models/user.js'
 import { errorMessages } from '../helpers/errorMessages.js';
 import jwt from 'jsonwebtoken'
-import { generateToken } from './utils/tokenManager.js';
+import { generateRefreshToken, generateToken } from '../utils/tokenManager.js';
 
 export const register = async (req, res) => {
     const { email, password } = req.body
@@ -36,6 +36,7 @@ export const login = async (req, res) => {
         }
         // Generar el token con JWT
         const { token, expiresIn } = generateToken(user.id)
+        generateRefreshToken(user.id, res)
 
         return res.json({ token, expiresIn })
     } catch (error) {
@@ -49,6 +50,6 @@ export const infoUser = async (req, res) => {
         const user = await User.findById(req.uid).lean();
         return res.json({ email: user.email, uid: user._id })
     } catch (error) {
-        return res.status(500).json({error: errorMessages.serverError})
+        return res.status(500).json({ error: errorMessages.serverError })
     }
 }
