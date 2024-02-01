@@ -10,18 +10,30 @@
 <body>
     <h1>Ruta protegida</h1>
     <div>
+        <button id="logOut">Cerras sesión</button>
         <h2>Email: <a id="email"></a></h2>
         <h2> User ID: <a id="user_id"></a> </h2>
     </div>
 
     <script>
+        const logOut = document.getElementById('logOut')
+        logOut.addEventListener('click', async() => {
+            const res = await fetch('api/v1/auth/logout')
+        });
+        console.log(res)
         document.addEventListener('DOMContentLoaded', async e => {
             try {
-                // const token = localStorage.getItem('token') esto es para local storage
+                const resToken = await fetch('api/v1/auth/refresh', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                const { token } = await resToken.json()
+
                 const res = await fetch('api/v1/auth/protected', {
                     method: 'GET',
                     headers: {
-                        // 'Authorization': `Bearer ${token}`, 
+                        'Authorization': `Bearer ${token}`, 
                         'Content-Type': 'application/json'
                     },
                     credentials: 'include',

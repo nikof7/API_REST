@@ -12,5 +12,5 @@ export const errorMessages = {
     emailInUse: "This email is already in use. Please use a different email",
     emailNotRegistered: "This email is not registered. Please sign up to create an account.",
     incorrectPassword: "Incorrect password. Please try again.",
-    invalidToken: "Invalid token."
+    errorToken: "An error occurred with the token."
 };

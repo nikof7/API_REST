@@ -20,6 +20,7 @@ export const generateRefreshToken = (uid, res) => {
             expires: new Date(Date.now() + expiresIn * 1000)
         });
     } catch (error) {
-        console.log(error)
+        console.log(error.message)
+        return res.status(401).json({ error: error.message })
     }
 }

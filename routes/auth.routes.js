@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { errorMessages } from '../helpers/errorMessages.js';
-import { infoUser, login, register } from '../controllers/auth.controllers.js';
+import { infoUser, login, register, refreshToken, logOut} from '../controllers/auth.controllers.js';
 import { body } from 'express-validator';
 import { validationResultExpress } from '../middlewares/validationResultExpress.js';
 import { MIN_PASSWORD_LENGTH } from '../helpers/configOptions.js';
@@ -43,5 +43,6 @@ router.post('/login', [
     login);
 
 router.get("/protected", requireToken , infoUser)
-
+router.get("/refresh", refreshToken)
+router.get("/logout", logOut)
 export default router;
