@@ -1,0 +1,14 @@
+import { errorMessages } from "../helpers/errorMessages.js"
+
+export const requireRefreshToken = (req, res, next) => {
+    try {
+        const refreshTokenCookie = req.cookies.refreshToken
+        if (!refreshTokenCookie) throw new Error(errorMessages.errorToken)
+        const { uid } = jwt.verify(refreshTokenCookie, process.env.JWT_REFRESH)
+    req.uid = uid
+    next()
+    } catch (error) {
+        console.log(error)
+        return res.status(401).json({ error: error.message })
+    }
+}

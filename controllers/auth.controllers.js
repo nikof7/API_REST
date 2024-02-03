@@ -56,14 +56,11 @@ export const infoUser = async (req, res) => {
 
 export const refreshToken = (req, res) => {
     try {
-        const refreshTokenCookie = req.cookies.refreshToken
-        if (!refreshTokenCookie) throw new Error(errorMessages.errorToken)
-        const { uid } = jwt.verify(refreshTokenCookie, process.env.JWT_REFRESH)
-        const { token, expiresIn } = generateToken(uid)
+        const { token, expiresIn } = generateToken(req.uid)
         return res.json({token, expiresIn});
     } catch (error) {
         console.log(error)
-        return res.status(401).json({ error: error.message })
+        return res.status(500).json({error: errorMessages.serverError})
     }
 }
 
@@ -71,7 +68,6 @@ export const logOut = (req, res) => {
     try {
         res.clearCookie('refreshToken')
         return res.json({ok : true})
-
     } catch (error) {
         console.log(error)
     }}
