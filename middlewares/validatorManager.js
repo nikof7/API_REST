@@ -2,6 +2,7 @@ import { body, validationResult } from "express-validator";
 import { errorMessages } from '../helpers/errorMessages.js';
 import { MIN_PASSWORD_LENGTH } from '../helpers/configOptions.js';
 import { User } from '../models/user.js'
+import axios from "axios";
 
 export const validationResultExpress = (req, res, next) => {
     const errors = validationResult(req);
@@ -11,6 +12,27 @@ export const validationResultExpress = (req, res, next) => {
     }
     next();
 }
+
+export const bodyLinkValidator = [
+    body('longLink', errorMessages.incorrectLink)
+        .trim()
+        .notEmpty()
+        .custom(async (value, { req }) => {
+            try {
+                value = value.toLowerCase()
+                if (!value.startsWith('https://')) {
+                    value = `https://${value}`
+                }
+                await axios.get(value)
+                req.longLink = value; //  Guardar el valor en req.longLink
+                return value;
+            } catch (error) {
+                //console.log(erorr)
+                throw new Error(errorMessages.longLinkNotFound)
+            }
+        }),
+    validationResultExpress
+]
 
 export const bodyRegisterValidator = [
     body('email', errorMessages.invalidEmail)

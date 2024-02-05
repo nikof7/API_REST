@@ -12,5 +12,9 @@ export const errorMessages = {
     emailInUse: "This email is already in use. Please use a different email",
     emailNotRegistered: "This email is not registered. Please sign up to create an account.",
     incorrectPassword: "Incorrect password. Please try again.",
-    errorToken: "An error occurred with the token."
+    errorToken: "An error occurred with the token.",
+    incorrectLink: "Incorrect link.",
+    longLinkNotFound: "Long link not found 404",
+    linkNoExist: "Link doesn't exist.",
+    incorrectIdFormat: "Incorrect ID."
 };

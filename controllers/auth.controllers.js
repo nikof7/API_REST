@@ -13,8 +13,10 @@ export const register = async (req, res) => {
         await user.save()
 
         // Generar el token con JWT
+        const { token, expiresIn } = generateToken(user.id)
+        generateRefreshToken(user.id, res)
 
-        return res.status(201).json({ ok: true })
+        return res.json({ token, expiresIn })
     } catch (error) {
         console.log(error)
         if (error.code === 11000) {
@@ -57,17 +59,18 @@ export const infoUser = async (req, res) => {
 export const refreshToken = (req, res) => {
     try {
         const { token, expiresIn } = generateToken(req.uid)
-        return res.json({token, expiresIn});
+        return res.json({ token, expiresIn });
     } catch (error) {
         console.log(error)
-        return res.status(500).json({error: errorMessages.serverError})
+        return res.status(500).json({ error: errorMessages.serverError })
     }
 }
 
 export const logOut = (req, res) => {
     try {
         res.clearCookie('refreshToken')
-        return res.json({ok : true})
+        return res.json({ ok: true })
     } catch (error) {
         console.log(error)
-    }}
+    }
+}
